@@ -23,7 +23,7 @@ class VendorFactory extends Factory
     public function definition()
     {
         return [
-            'resource_id' => $this->faker->text(255),
+            'resource_id' => $this->faker->uuid,
             'company' => $this->faker->text(255),
             'email' => $this->faker->email,
             'phone' => $this->faker->phoneNumber,
