@@ -18,6 +18,8 @@ return [
         'created' => 'Successfully created',
         'saved' => 'Saved successfully',
         'removed' => 'Successfully removed',
+        'import' => 'Import',
+        'imported' => 'Import successfully'
     ],
 
     'users' => [
@@ -58,11 +60,15 @@ return [
         'create_title' => 'Create Product',
         'edit_title' => 'Edit Product',
         'show_title' => 'Show Product',
+        'import_title' => 'Import Products',
         'inputs' => [
             'name' => 'Name',
             'description' => 'Description',
             'image_url' => 'Image Url',
         ],
+        'errors' => [
+            'no_csv_configuration' => 'CSV Download is not Configured for this vendor'
+        ]
     ],
 
     'vendor_products' => [
@@ -79,4 +85,16 @@ return [
             'available' => 'Available',
         ],
     ],
+    'offers' => [
+        'name' => 'Offers',
+        'index_title' => 'Offers',
+        'new_title' => 'New Offer',
+        'create_title' => 'Create Offer',
+        'edit_title' => 'Edit Offer',
+        'show_title' => 'Show Offer',
+        'inputs' => [
+            'contact_id' => 'Contact',
+            'name' => 'Name'
+        ]
+    ]
 ];

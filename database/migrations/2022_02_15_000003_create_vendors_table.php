@@ -22,6 +22,9 @@ class CreateVendorsTable extends Migration
             $table->string('salutation');
             $table->string('first_name');
             $table->string('last_name');
+            $table->text('username')->nullable();
+            $table->text('password')->nullable();
+            $table->string('csv_url')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

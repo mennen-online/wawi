@@ -66,4 +66,32 @@
             required
         ></x-inputs.text>
     </x-inputs.group>
+
+    <x-inputs.group class="w-full">
+        <x-inputs.text
+            name="username"
+            label="Username"
+            value="{{ old('username', ($editing ? $vendor->username : '')) }}"
+            maxlength="255"
+            placeholder="Username"
+            ></x-inputs.text>
+    </x-inputs.group>
+
+    <x-inputs.group class="w-full">
+        <x-inputs.text
+            name="password"
+            label="Passwort"
+            value="{{ old('password', ($editing ? $vendor->password : '')) }}"
+            type="password"
+            ></x-inputs.text>
+    </x-inputs.group>
+
+    <x-inputs.group class="w-full">
+        <x-inputs.text
+            name="csv_url"
+            label="CSV Download URL"
+            value="{{ old('csv_url', ($editing ? $vendor->csv_url : '')) }}"
+            placeholder="https://someurl.de/file.csv"
+            ></x-inputs.text>
+    </x-inputs.group>
 </div>

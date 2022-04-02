@@ -38,6 +38,11 @@
                         Vendor Products
                         </x-dropdown-link>
                         @endcan
+                        @can('view-any', App\Models\Offer::class)
+                        <x-dropdown-link href="{{route('offers.index')}}">
+                            Offers
+                        </x-dropdown-link>
+                        @endcan
                 </x-nav-dropdown>
 
             </div>

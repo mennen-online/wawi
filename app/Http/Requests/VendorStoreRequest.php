@@ -30,6 +30,9 @@ class VendorStoreRequest extends FormRequest
             'salutation' => ['required', 'max:255', 'string'],
             'first_name' => ['required', 'max:255', 'string'],
             'last_name' => ['required', 'max:255', 'string'],
+            'username' => ['nullable', 'max:255', 'string'],
+            'password' => ['nullable', 'max:255', 'string'],
+            'csv_url' => ['nullable', 'max:255', 'string']
         ];
     }
 }

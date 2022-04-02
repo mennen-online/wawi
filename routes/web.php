@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OfferController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -32,7 +33,15 @@ Route::prefix('/')
     ->middleware(['auth:sanctum', 'verified'])
     ->group(function () {
         Route::resource('users', UserController::class);
+        Route::prefix('vendors')->group(function() {
+            Route::get('import', [VendorController::class, 'import'])->name('vendors.import');
+        });
         Route::resource('vendors', VendorController::class);
+        Route::resource('offers', OfferController::class)->names('offers');
+        Route::prefix('products')->group(function() {
+            Route::get('import', [ProductController::class, 'import'])->name('products.import');
+            Route::post('import', [ProductController::class, 'processImport'])->name('products.process');
+        });
         Route::resource('products', ProductController::class);
         Route::resource('vendor-products', VendorProductController::class);
     });

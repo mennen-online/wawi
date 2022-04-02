@@ -51,6 +51,8 @@ class VendorTest extends TestCase
         $response = $this->postJson(route('api.vendors.store'), $data);
 
         unset($data['resource_id']);
+        unset($data['username']);
+        unset($data['csv_url']);
 
         $this->assertDatabaseHas('vendors', $data);
 
@@ -72,11 +74,15 @@ class VendorTest extends TestCase
             'salutation' => $this->faker->text(255),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'username' => $this->faker->text(255),
+            'csv_url' => $this->faker->text(255),
         ];
 
         $response = $this->putJson(route('api.vendors.update', $vendor), $data);
 
         unset($data['resource_id']);
+        unset($data['username']);
+        unset($data['csv_url']);
 
         $data['id'] = $vendor->id;
 

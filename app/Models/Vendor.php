@@ -21,12 +21,26 @@ class Vendor extends Model
         'salutation',
         'first_name',
         'last_name',
+        'username',
+        'password',
+        'csv_url',
+    ];
+
+    protected $casts = [
+        'username' => 'encrypted',
+        'password' => 'encrypted'
     ];
 
     protected $searchableFields = ['*'];
 
+    protected $hidden = ['password'];
+
     public function vendorProducts()
     {
         return $this->hasMany(VendorProduct::class);
+    }
+
+    public function products() {
+        return $this->hasManyThrough(Product::class, VendorProduct::class, 'vendor_id', 'id', 'id');
     }
 }

@@ -11,7 +11,12 @@ class VendorProduct extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['vendor_id', 'product_id', 'price', 'available'];
+    protected $fillable = [
+        'vendor_id',
+        'product_id',
+        'article_number',
+        'price',
+        'available'];
 
     protected $searchableFields = ['*'];
 

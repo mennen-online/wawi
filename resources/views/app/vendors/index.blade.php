@@ -41,6 +41,13 @@
                                 @lang('crud.common.create')
                             </a>
                             @endcan
+                            <a
+                                href="{{ route('vendors.import') }}"
+                                class="button button-secondary"
+                            >
+                                <i class="mr-1 icon ion-md-add"></i>
+                                @lang('crud.common.import')
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -104,6 +111,19 @@
                                             align-middle
                                         "
                                     >
+                                        <a
+                                            href="{{route('products.import', ['vendor_id' => $vendor->id])}}"
+                                            class="mr-1"
+                                        >
+                                            <button
+                                                type="button"
+                                                class="button"
+                                            >
+                                                <i
+                                                    class="icon ion-md-create"
+                                                ></i>
+                                            </button>
+                                        </a>
                                         @can('update', $vendor)
                                         <a
                                             href="{{ route('vendors.edit', $vendor) }}"

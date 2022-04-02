@@ -41,6 +41,13 @@
                                 @lang('crud.common.create')
                             </a>
                             @endcan
+                            <a
+                                href="{{ route('products.import') }}"
+                                class="button button-secondary"
+                                >
+                                <i class="mr-1 icon ion-md-add"></i>
+                                @lang('crud.common.import')
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -55,9 +62,6 @@
                                 <th class="px-4 py-3 text-left">
                                     @lang('crud.products.inputs.description')
                                 </th>
-                                <th class="px-4 py-3 text-left">
-                                    @lang('crud.products.inputs.image_url')
-                                </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -69,11 +73,6 @@
                                 </td>
                                 <td class="px-4 py-3 text-left">
                                     {{ $product->description ?? '-' }}
-                                </td>
-                                <td class="px-4 py-3 text-left">
-                                    <x-partials.thumbnail
-                                        src="{{ $product->image_url ? \Storage::url($product->image_url) : '' }}"
-                                    />
                                 </td>
                                 <td
                                     class="px-4 py-3 text-center"
@@ -98,7 +97,7 @@
                                                 class="button"
                                             >
                                                 <i
-                                                    class="icon ion-md-create"
+                                                    class="icon ion-md-log-in"
                                                 ></i>
                                             </button>
                                         </a>

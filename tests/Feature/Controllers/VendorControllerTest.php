@@ -63,6 +63,8 @@ class VendorControllerTest extends TestCase
         $response = $this->post(route('vendors.store'), $data);
 
         unset($data['resource_id']);
+        unset($data['username']);
+        unset($data['csv_url']);
 
         $this->assertDatabaseHas('vendors', $data);
 
@@ -116,11 +118,15 @@ class VendorControllerTest extends TestCase
             'salutation' => $this->faker->text(255),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'username' => $this->faker->text(255),
+            'csv_url' => $this->faker->text(255),
         ];
 
         $response = $this->put(route('vendors.update', $vendor), $data);
 
         unset($data['resource_id']);
+        unset($data['username']);
+        unset($data['csv_url']);
 
         $data['id'] = $vendor->id;
 
@@ -141,5 +147,12 @@ class VendorControllerTest extends TestCase
         $response->assertRedirect(route('vendors.index'));
 
         $this->assertSoftDeleted($vendor);
+    }
+
+    /**
+     * @test
+     */
+    public function it_imports_vendors_from_lexoffice() {
+        $this->get(route('vendors.import'))->assertRedirect(route('vendors.index'));
     }
 }

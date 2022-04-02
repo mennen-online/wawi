@@ -68,19 +68,19 @@
                             @forelse($vendorProducts as $vendorProduct)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3 text-left">
-                                    {{
-                                    optional($vendorProduct->vendor)->resource_id
-                                    ?? '-' }}
+                                    {!!
+                                    optional($vendorProduct->vendor)->company
+                                    ?? '-'  !!}
                                 </td>
                                 <td class="px-4 py-3 text-left">
                                     {{ optional($vendorProduct->product)->name
                                     ?? '-' }}
                                 </td>
                                 <td class="px-4 py-3 text-right">
-                                    {{ $vendorProduct->price ?? '-' }}
+                                    {{ $vendorProduct->price ?? '-' }} &euro;
                                 </td>
                                 <td class="px-4 py-3 text-left">
-                                    {{ $vendorProduct->available ?? '-' }}
+                                    {{ $vendorProduct->available ? 'Ja' : 'Nein' }}
                                 </td>
                                 <td
                                     class="px-4 py-3 text-center"
