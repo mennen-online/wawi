@@ -12,32 +12,31 @@ use App\Http\Requests\VendorProductUpdateRequest;
 class VendorProductController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $this->authorize('view-any', VendorProduct::class);
 
         $search = $request->get('search', '');
 
-        $vendorProducts = VendorProduct::search($search)
-            ->latest()
-            ->paginate(5)
-            ->withQueryString();
+        $products = Product::search($search)->get()->pluck('id');
+
+        $vendorProducts = VendorProduct::whereIn('product_id', $products)->paginate()->withQueryString();
+
+        $offers = $request->user()->offers()->get();
 
         return view(
             'app.vendor_products.index',
-            compact('vendorProducts', 'search')
+            compact('vendorProducts', 'search', 'offers')
         );
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $this->authorize('create', VendorProduct::class);
 
         $vendors = Vendor::pluck('resource_id', 'id');
@@ -50,11 +49,10 @@ class VendorProductController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\VendorProductStoreRequest $request
+     * @param  \App\Http\Requests\VendorProductStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(VendorProductStoreRequest $request)
-    {
+    public function store(VendorProductStoreRequest $request) {
         $this->authorize('create', VendorProduct::class);
 
         $validated = $request->validated();
@@ -67,24 +65,22 @@ class VendorProductController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\VendorProduct $vendorProduct
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\VendorProduct  $vendorProduct
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, VendorProduct $vendorProduct)
-    {
+    public function show(Request $request, VendorProduct $vendorProduct) {
         $this->authorize('view', $vendorProduct);
 
         return view('app.vendor_products.show', compact('vendorProduct'));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\VendorProduct $vendorProduct
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\VendorProduct  $vendorProduct
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, VendorProduct $vendorProduct)
-    {
+    public function edit(Request $request, VendorProduct $vendorProduct) {
         $this->authorize('update', $vendorProduct);
 
         $vendors = Vendor::pluck('resource_id', 'id');
@@ -97,13 +93,13 @@ class VendorProductController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\VendorProductUpdateRequest $request
-     * @param \App\Models\VendorProduct $vendorProduct
+     * @param  \App\Http\Requests\VendorProductUpdateRequest  $request
+     * @param  \App\Models\VendorProduct  $vendorProduct
      * @return \Illuminate\Http\Response
      */
     public function update(
         VendorProductUpdateRequest $request,
-        VendorProduct $vendorProduct
+        VendorProduct              $vendorProduct
     ) {
         $this->authorize('update', $vendorProduct);
 
@@ -117,12 +113,11 @@ class VendorProductController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\VendorProduct $vendorProduct
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\VendorProduct  $vendorProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, VendorProduct $vendorProduct)
-    {
+    public function destroy(Request $request, VendorProduct $vendorProduct) {
         $this->authorize('delete', $vendorProduct);
 
         $vendorProduct->delete();

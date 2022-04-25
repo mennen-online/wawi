@@ -38,9 +38,11 @@ Route::prefix('/')
         });
         Route::resource('vendors', VendorController::class);
         Route::resource('offers', OfferController::class)->names('offers');
+        Route::get('offers/{offer}/sendToLexoffice', [OfferController::class, 'sendToLexoffice'])->name('offer.send-to-lexoffice');
         Route::prefix('products')->group(function() {
             Route::get('import', [ProductController::class, 'import'])->name('products.import');
             Route::post('import', [ProductController::class, 'processImport'])->name('products.process');
+            Route::get('assignToOffer/{offer}/{vendorProduct}', [ProductController::class, 'assignToOffer'])->name('product.assign-to-offer');
         });
         Route::resource('products', ProductController::class);
         Route::resource('vendor-products', VendorProductController::class);

@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'image_url'];
 
-    protected $searchableFields = ['*'];
+    protected $searchableFields = ['name'];
 
     public function vendorProducts()
     {

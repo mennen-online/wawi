@@ -78,7 +78,7 @@
                                     >
                                         @can('update', $offer)
                                             <a
-                                                    href="{{ route('products.edit', $offer) }}"
+                                                    href="{{ route('offers.edit', $offer) }}"
                                                     class="mr-1"
                                             >
                                                 <button
@@ -92,7 +92,7 @@
                                             </a>
                                         @endcan @can('view', $offer)
                                             <a
-                                                    href="{{ route('products.show', $offer) }}"
+                                                    href="{{ route('offers.show', $offer) }}"
                                                     class="mr-1"
                                             >
                                                 <button
@@ -104,7 +104,7 @@
                                             </a>
                                         @endcan @can('delete', $offer)
                                             <form
-                                                    action="{{ route('products.destroy', $offer) }}"
+                                                    action="{{ route('offers.destroy', $offer) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('{{ __('crud.common.are_you_sure') }}')"
                                             >

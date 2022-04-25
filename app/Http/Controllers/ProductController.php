@@ -7,8 +7,11 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Imports\ProductsImport;
 use App\Imports\Wave\ProductImport;
+use App\Models\Offer;
+use App\Models\OfferVendorProduct;
 use App\Models\Product;
 use App\Models\Vendor;
+use App\Models\VendorProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -180,5 +183,15 @@ class ProductController extends Controller
         });
 
         return to_route('products.import');
+    }
+
+    public function assignToOffer(Request $request, Offer $offer, VendorProduct $vendorProduct) {
+        if($offerVendorProduct = OfferVendorProduct::whereVendorProductId($vendorProduct->id)->whereOfferId($offer->id)->first()) {
+            $offerVendorProduct->increment('quantity');
+        }else {
+            $offer->vendorProducts()->attach($vendorProduct);
+        }
+
+        return to_route('vendor-products.index');
     }
 }

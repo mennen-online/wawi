@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Offer\StoreOfferRequest;
+use App\Models\Offer;
 use App\Services\Lexoffice\Endpoints\Contacts;
+use App\Services\Lexoffice\Endpoints\Quotation;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -12,6 +14,11 @@ class OfferController extends Controller
     public function index(Request $request) {
         return view('app.offers.index')
             ->with('offers', $request->user()->offers()->get());
+    }
+
+    public function show(Request $request, Offer $offer) {
+        return view('app.offers.show')
+            ->with('offer', $offer);
     }
 
     public function create(Request $request) {
@@ -35,5 +42,9 @@ class OfferController extends Controller
 
     public function destroy(Request $request) {
 
+    }
+
+    public function sendToLexoffice(Request $request, Offer $offer) {
+        app()->make(Quotation::class)->createQuotation($offer);
     }
 }

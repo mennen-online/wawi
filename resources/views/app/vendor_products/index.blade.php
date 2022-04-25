@@ -14,16 +14,16 @@
                             <form>
                                 <div class="flex items-center w-full">
                                     <x-inputs.text
-                                        name="search"
-                                        value="{{ $search ?? '' }}"
-                                        placeholder="{{ __('crud.common.search') }}"
-                                        autocomplete="off"
+                                            name="search"
+                                            value="{{ $search ?? '' }}"
+                                            placeholder="{{ __('crud.common.search') }}"
+                                            autocomplete="off"
                                     ></x-inputs.text>
 
                                     <div class="ml-1">
                                         <button
-                                            type="submit"
-                                            class="button button-primary"
+                                                type="submit"
+                                                class="button button-primary"
                                         >
                                             <i class="icon ion-md-search"></i>
                                         </button>
@@ -33,13 +33,13 @@
                         </div>
                         <div class="md:w-1/2 text-right">
                             @can('create', App\Models\VendorProduct::class)
-                            <a
-                                href="{{ route('vendor-products.create') }}"
-                                class="button button-primary"
-                            >
-                                <i class="mr-1 icon ion-md-add"></i>
-                                @lang('crud.common.create')
-                            </a>
+                                <a
+                                        href="{{ route('vendor-products.create') }}"
+                                        class="button button-primary"
+                                >
+                                    <i class="mr-1 icon ion-md-add"></i>
+                                    @lang('crud.common.create')
+                                </a>
                             @endcan
                         </div>
                     </div>
@@ -48,24 +48,24 @@
                 <div class="block w-full overflow-auto scrolling-touch">
                     <table class="w-full max-w-full mb-4 bg-transparent">
                         <thead class="text-gray-700">
-                            <tr>
-                                <th class="px-4 py-3 text-left">
-                                    @lang('crud.vendor_products.inputs.vendor_id')
-                                </th>
-                                <th class="px-4 py-3 text-left">
-                                    @lang('crud.vendor_products.inputs.product_id')
-                                </th>
-                                <th class="px-4 py-3 text-right">
-                                    @lang('crud.vendor_products.inputs.price')
-                                </th>
-                                <th class="px-4 py-3 text-left">
-                                    @lang('crud.vendor_products.inputs.available')
-                                </th>
-                                <th></th>
-                            </tr>
+                        <tr>
+                            <th class="px-4 py-3 text-left">
+                                @lang('crud.vendor_products.inputs.vendor_id')
+                            </th>
+                            <th class="px-4 py-3 text-left">
+                                @lang('crud.vendor_products.inputs.product_id')
+                            </th>
+                            <th class="px-4 py-3 text-right">
+                                @lang('crud.vendor_products.inputs.price')
+                            </th>
+                            <th class="px-4 py-3 text-left">
+                                @lang('crud.vendor_products.inputs.available')
+                            </th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody class="text-gray-600">
-                            @forelse($vendorProducts as $vendorProduct)
+                        @forelse($vendorProducts as $vendorProduct)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3 text-left">
                                     {!!
@@ -83,84 +83,94 @@
                                     {{ $vendorProduct->available ? 'Ja' : 'Nein' }}
                                 </td>
                                 <td
-                                    class="px-4 py-3 text-center"
-                                    style="width: 134px;"
+                                        class="px-4 py-3 text-center"
+                                        style="width: 134px;"
                                 >
+                                    <x-nav-dropdown title="Zu Angebot hinzufügen" align="right" width="48">
+                                        @foreach($offers as $offer)
+                                            <x-dropdown-link href="{{ route('product.assign-to-offer', [
+                                        'offer' => $offer->id,
+                                        'vendorProduct' => $vendorProduct->id
+                                            ]) }}">
+                                                {{$offer->name}}
+                                            </x-dropdown-link>
+                                        @endforeach
+                                    </x-nav-dropdown>
                                     <div
-                                        role="group"
-                                        aria-label="Row Actions"
-                                        class="
+                                            role="group"
+                                            aria-label="Row Actions"
+                                            class="
                                             relative
                                             inline-flex
                                             align-middle
                                         "
                                     >
                                         @can('update', $vendorProduct)
-                                        <a
-                                            href="{{ route('vendor-products.edit', $vendorProduct) }}"
-                                            class="mr-1"
-                                        >
-                                            <button
-                                                type="button"
-                                                class="button"
+                                            <a
+                                                    href="{{ route('vendor-products.edit', $vendorProduct) }}"
+                                                    class="mr-1"
                                             >
-                                                <i
-                                                    class="icon ion-md-create"
-                                                ></i>
-                                            </button>
-                                        </a>
+                                                <button
+                                                        type="button"
+                                                        class="button"
+                                                >
+                                                    <i
+                                                            class="icon ion-md-create"
+                                                    ></i>
+                                                </button>
+                                            </a>
                                         @endcan @can('view', $vendorProduct)
-                                        <a
-                                            href="{{ route('vendor-products.show', $vendorProduct) }}"
-                                            class="mr-1"
-                                        >
-                                            <button
-                                                type="button"
-                                                class="button"
+                                            <a
+                                                    href="{{ route('vendor-products.show', $vendorProduct) }}"
+                                                    class="mr-1"
                                             >
-                                                <i class="icon ion-md-eye"></i>
-                                            </button>
-                                        </a>
+                                                <button
+                                                        type="button"
+                                                        class="button"
+                                                >
+                                                    <i class="icon ion-md-eye"></i>
+                                                </button>
+                                            </a>
                                         @endcan @can('delete', $vendorProduct)
-                                        <form
-                                            action="{{ route('vendor-products.destroy', $vendorProduct) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('{{ __('crud.common.are_you_sure') }}')"
-                                        >
-                                            @csrf @method('DELETE')
-                                            <button
-                                                type="submit"
-                                                class="button"
+                                            <form
+                                                    action="{{ route('vendor-products.destroy', $vendorProduct) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('{{ __('crud.common.are_you_sure') }}')"
                                             >
-                                                <i
-                                                    class="
+                                                @csrf @method('DELETE')
+                                                <button
+                                                        type="submit"
+                                                        class="button"
+                                                >
+                                                    <i
+                                                            class="
                                                         icon
                                                         ion-md-trash
                                                         text-red-600
                                                     "
-                                                ></i>
-                                            </button>
-                                        </form>
+                                                    ></i>
+                                                </button>
+                                            </form>
                                         @endcan
                                     </div>
                                 </td>
                             </tr>
-                            @empty
+                        @empty
                             <tr>
                                 <td colspan="5">
                                     @lang('crud.common.no_items_found')
                                 </td>
                             </tr>
-                            @endforelse
+                        @endforelse
                         </tbody>
                         <tfoot>
-                            <tr>
-                                <td colspan="5">
-                                    <div class="mt-10 px-4">
-                                        {!! $vendorProducts->render() !!}
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="5">
+                                <div class="mt-10 px-4">
+                                    {!! $vendorProducts->render() !!}
+                                </div>
+                            </td>
+                        </tr>
                         </tfoot>
                     </table>
                 </div>

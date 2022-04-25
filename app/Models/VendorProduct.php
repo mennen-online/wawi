@@ -18,7 +18,7 @@ class VendorProduct extends Model
         'price',
         'available'];
 
-    protected $searchableFields = ['*'];
+    protected $searchableFields = ['*', 'product.name', 'product.description'];
 
     protected $table = 'vendor_products';
 

@@ -28,7 +28,7 @@ class Offer extends Model
 
     public function vendorProducts()
     {
-        return $this->belongsToMany(VendorProduct::class);
+        return $this->belongsToMany(VendorProduct::class)->withPivot('quantity');
     }
 
     public function contact(): Attribute {
