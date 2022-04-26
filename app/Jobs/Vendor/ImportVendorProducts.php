@@ -3,7 +3,9 @@
 namespace App\Jobs\Vendor;
 
 use App\Imports\Wave\ProductImport;
+use App\Models\User;
 use App\Models\Vendor;
+use App\Notifications\VendorProduct\ImportSuccessfulNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -74,5 +76,7 @@ class ImportVendorProducts implements ShouldQueue
                 (new ProductImport())->model($product->toArray());
             }
         });
+
+        User::first()->notify(new ImportSuccessfulNotification($this->vendor));
     }
 }
