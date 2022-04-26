@@ -25,7 +25,7 @@
                         <h5 class="font-medium text-gray-700">
                             @lang('crud.offers.inputs.contact_id')
                         </h5>
-                        <span>{{ $offer->contact?->company?->name ?? '-' }}</span>
+                        <span>{{ $offer->contactName ?? '-' }}</span>
                     </div>
                 </div>
 
@@ -154,6 +154,16 @@
                                         })->sum(), 2)}} &euro; <br/> zzgl. UST.
                                     </td>
                                 </tr>
+                            <tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td class="px-4 py-3 text-left">
+                                        {{number_format($offer->vendorProducts->map(function($vendorProduct) {
+                                            return $vendorProduct->getOriginal()['pivot_quantity'] * $vendorProduct->price;
+                                        })->sum() * 1.19, 2)}} &euro; <br/> inkl. UST.
+                                    </td>
+                                </tr>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
@@ -167,7 +177,7 @@
                     <a href="{{route('offer.send-to-lexoffice', ['offer' => $offer->id])}}" class="button">
                         In Lexoffice erstellen
                     </a>
-                    @if($offer->resource_id)
+                    @if($offer->resource_id !== "null")
                         <a href="{{route('offer.open-in-lexoffice', ['offer' => $offer->id])}}" target="_blank" class="button">
                             In Lexoffice öffnen
                         </a>

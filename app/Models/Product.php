@@ -17,6 +17,16 @@ class Product extends Model
 
     protected $searchableFields = ['name'];
 
+    public function scopeSearch($query, $search) {
+        $query->where(function($query) use($search){
+            foreach($this->getSearchableFields() as $field) {
+                foreach(explode(' ', $search) as $searchTerm) {
+                    $query->orWhere($field, 'LIKE', '%'.$searchTerm.'%');
+                }
+            }
+        });
+    }
+
     public function vendorProducts()
     {
         return $this->hasMany(VendorProduct::class);

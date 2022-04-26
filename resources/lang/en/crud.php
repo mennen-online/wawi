@@ -81,6 +81,7 @@ return [
         'inputs' => [
             'vendor_id' => 'Vendor',
             'product_id' => 'Product',
+            'product_description' => 'Beschreibung',
             'price' => 'Price',
             'available' => 'Available',
         ],

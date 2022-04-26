@@ -61,7 +61,7 @@
                                     {{ $offer->name ?? '-' }}
                                 </td>
                                 <td class="px-4 py-3 text-left">
-                                    {{ $offer->contact?->company?->name ?? '-' }}
+                                    {{ $offer->contactName ?? '-' }}
                                 </td>
                                 <td
                                         class="px-4 py-3 text-center"

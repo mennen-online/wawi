@@ -51,7 +51,9 @@ class OfferController extends Controller
     public function sendToLexoffice(Request $request, Offer $offer) {
         $response = app()->make(Quotation::class)->createQuotation($offer);
 
-        if($response->ok()) {
+        $responseObject = $response->object();
+
+        if(property_exists($responseObject, 'id')) {
             $offer->update([
                 'resource_id' => $response->object()->id
             ]);
@@ -61,6 +63,6 @@ class OfferController extends Controller
     }
 
     public function openInLexoffice(Request $request, Offer $offer) {
-        return redirect('https://app.lexoffice.io/permalink/quotations/view/' . $offer->resource_id);
+        return redirect('https://app.lexoffice.de/permalink/quotations/view/' . $offer->resource_id);
     }
 }

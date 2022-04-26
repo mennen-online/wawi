@@ -18,14 +18,11 @@ class VendorProductController extends Controller
     public function index(Request $request) {
         $this->authorize('view-any', VendorProduct::class);
 
-        $search = $request->get('search');
-        if($search) {
-            $products = Product::search($search)->get()->pluck('id');
+        $search = $request->get('search', '');
 
-            $vendorProducts = VendorProduct::whereIn('product_id', $products)->get();
-        }else {
-            $vendorProducts = VendorProduct::all();
-        }
+        $products = Product::search($search)->take(1000)->get()->pluck('id');
+
+        $vendorProducts = VendorProduct::whereIn('product_id', $products)->paginate(10)->withQueryString();
 
         $offers = $request->user()->offers()->get();
 

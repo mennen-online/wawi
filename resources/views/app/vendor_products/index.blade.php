@@ -55,6 +55,9 @@
                             <th class="px-4 py-3 text-left">
                                 @lang('crud.vendor_products.inputs.product_id')
                             </th>
+                            <td class="px-4 py-3 text-left">
+                                @lang('crud.vendor_products.inputs.product_description')
+                            </td>
                             <th class="px-4 py-3 text-right">
                                 @lang('crud.vendor_products.inputs.price')
                             </th>
@@ -76,8 +79,12 @@
                                     {{ optional($vendorProduct->product)->name
                                     ?? '-' }}
                                 </td>
+                                <td class="px-4 py-3 text-left">
+                                    {{ optional($vendorProduct->product)->description
+                                    ?? '-' }}
+                                </td>
                                 <td class="px-4 py-3 text-right">
-                                    {{ $vendorProduct->price ?? '-' }} &euro;
+                                    {{ number_format($vendorProduct->price, 2) ?? '-' }} &euro;
                                 </td>
                                 <td class="px-4 py-3 text-left">
                                     {{ $vendorProduct->available ? 'Ja' : 'Nein' }}
@@ -163,6 +170,15 @@
                             </tr>
                         @endforelse
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div class="mt-10 px-4">
+                                    {!! $vendorProducts->render() !!}
+                                </div>
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
             </x-partials.card>
