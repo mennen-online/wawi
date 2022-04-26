@@ -39,6 +39,7 @@ Route::prefix('/')
         Route::resource('vendors', VendorController::class);
         Route::resource('offers', OfferController::class)->names('offers');
         Route::get('offers/{offer}/sendToLexoffice', [OfferController::class, 'sendToLexoffice'])->name('offer.send-to-lexoffice');
+        Route::get('offers/{offer}/openInLexoffice', [OfferController::class, 'openInLexoffice'])->name('offer.open-in-lexoffice');
         Route::prefix('products')->group(function() {
             Route::get('import', [ProductController::class, 'import'])->name('products.import');
             Route::post('import', [ProductController::class, 'processImport'])->name('products.process');

@@ -59,4 +59,8 @@ class OfferController extends Controller
 
         return to_route('offers.index');
     }
+
+    public function openInLexoffice(Request $request, Offer $offer) {
+        return redirect('https://app.lexoffice.io/permalink/quotations/view/' . $offer->resource_id);
+    }
 }

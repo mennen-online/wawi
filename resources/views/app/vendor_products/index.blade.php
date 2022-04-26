@@ -163,15 +163,6 @@
                             </tr>
                         @endforelse
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="5">
-                                <div class="mt-10 px-4">
-                                    {!! $vendorProducts->render() !!}
-                                </div>
-                            </td>
-                        </tr>
-                        </tfoot>
                     </table>
                 </div>
             </x-partials.card>

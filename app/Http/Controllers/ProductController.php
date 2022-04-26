@@ -7,6 +7,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Imports\ProductsImport;
 use App\Imports\Wave\ProductImport;
+use App\Jobs\Vendor\ImportVendorProducts;
 use App\Models\Offer;
 use App\Models\OfferVendorProduct;
 use App\Models\Product;
@@ -143,44 +144,7 @@ class ProductController extends Controller
     public function processImport(ProductProcessImportRequest $processImportRequest) {
         $vendor = Vendor::find($processImportRequest->input('vendor_id'));
 
-        if (empty($vendor->csv_url)) {
-            return view('app.products.import')
-                ->with('vendors', Vendor::all())
-                ->with('editing', null)
-                ->withError(__('crud.products.errors.no_csv_configuration'));
-        }
-
-        $request = Http::withBasicAuth($vendor->username, $vendor->password)->get($vendor->csv_url);
-
-        $path = 'csv/'.$vendor->id.'/file.csv';
-
-        Storage::put($path, $request->body());
-
-        $string = str_replace([
-            "\n",
-        ], [
-            "\\"
-        ], $request->body());
-
-        $array = explode("\\", $string);
-
-        $csvLines = collect($array)->map(function ($line) {
-            return explode("\t", $line);
-        });
-
-        $keys = $csvLines->first();
-
-        $items = $csvLines->skip(1)->all();
-
-        collect($items)->map(function($item) use($keys) {
-            if(count($item) === count($keys)) {
-                return collect($keys)->combine($item);
-            }
-        })->each(function($product) {
-            if($product) {
-                (new ProductImport())->model($product->toArray());
-            }
-        });
+        ImportVendorProducts::dispatch($vendor);
 
         return to_route('products.import');
     }

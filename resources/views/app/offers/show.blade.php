@@ -167,6 +167,11 @@
                     <a href="{{route('offer.send-to-lexoffice', ['offer' => $offer->id])}}" class="button">
                         In Lexoffice erstellen
                     </a>
+                    @if($offer->resource_id)
+                        <a href="{{route('offer.open-in-lexoffice', ['offer' => $offer->id])}}" target="_blank" class="button">
+                            In Lexoffice öffnen
+                        </a>
+                    @endif
                 </div>
             </x-partials.card>
         </div>
