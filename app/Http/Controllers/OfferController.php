@@ -40,11 +40,23 @@ class OfferController extends Controller
 
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request, int $id) {
+        $offer = Offer::findOrFail($id);
 
+        $offer->delete();
+
+        return to_route('offers.index');
     }
 
     public function sendToLexoffice(Request $request, Offer $offer) {
-        app()->make(Quotation::class)->createQuotation($offer);
+        $response = app()->make(Quotation::class)->createQuotation($offer);
+
+        if($response->ok()) {
+            $offer->update([
+                'resource_id' => $response->object()->id
+            ]);
+        }
+
+        return to_route('offers.index');
     }
 }

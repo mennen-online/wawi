@@ -65,8 +65,8 @@
                                         ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-right">
-                                        {{ $offerProduct->price * $offerProduct->getOriginal()['pivot_quantity'] ?? '-' }} &euro;<br/>
-                                        ({{$offerProduct->price}} &euro;)
+                                        {{ number_format($offerProduct->price * $offerProduct->getOriginal()['pivot_quantity'], 2) ?? '-' }} &euro;<br/>
+                                        ({{number_format($offerProduct->price, 2)}} &euro;)
                                     </td>
                                     <td class="px-4 py-3 text-left">
                                         {{ $offerProduct->available ? 'Ja' : 'Nein' }}
@@ -149,7 +149,9 @@
                                 <tr>
                                     <td colspan="2"></td>
                                     <td class="px-4 py-3 text-left">
-                                        {{$offer->vendorProducts()->sum('price')}} &euro; zzgl. UST.
+                                        {{number_format($offer->vendorProducts->map(function($vendorProduct) {
+                                            return $vendorProduct->getOriginal()['pivot_quantity'] * $vendorProduct->price;
+                                        })->sum(), 2)}} &euro; <br/> zzgl. UST.
                                     </td>
                                 </tr>
                             </tfoot>

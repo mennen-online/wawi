@@ -27,8 +27,8 @@ class Quotation extends Lexoffice
         $this->createLineItems($offer);
 
         $quotationData = [
-            'voucherDate' => now()->toIso8601ZuluString(),
-            'expirationDate' => now()->addMonth()->toIso8601ZuluString(),
+            'voucherDate' => self::buildLexofficeDate(now()),
+            'expirationDate' => self::buildLexofficeDate(now()->addMonth()),
             'address' => [
                 'contactId' => $offer->contact_id
             ],
@@ -43,7 +43,7 @@ class Quotation extends Lexoffice
         return $this->store($quotationData);
     }
 
-    public function createLineItems(Offer $offer): Collection {
+    public function createLineItems(Offer $offer) {
         $this->lineItems = new Collection();
 
         $offer->vendorProducts->each(function($vendorProduct) {

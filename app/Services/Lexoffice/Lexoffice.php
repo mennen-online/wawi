@@ -2,7 +2,9 @@
 
 namespace App\Services\Lexoffice;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -127,7 +129,16 @@ abstract class Lexoffice
         return self::API_URL.$endpoint->toString();
     }
 
-    private function prepareRequest() {
-        return Http::withToken(config('lexoffice.token'));
+    private function prepareRequest(): PendingRequest {
+        return Http::withToken(config('lexoffice.token'))->acceptJson();
+    }
+
+    public static function buildLexofficeDate(?Carbon $carbon = null)
+    {
+        $date = date('c', strtotime($carbon->format('Y-m-d\TH:i:s.vO')));
+
+        $milliseconds = Str::substr($carbon->format('v'), 0, 3);
+
+        return Str::replace('+', '.' . $milliseconds . '+', $date);
     }
 }
