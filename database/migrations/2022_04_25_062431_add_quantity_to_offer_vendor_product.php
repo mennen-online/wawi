@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::table('offer_vendor_product', function (Blueprint $table) {
-            $table->id()->after('offer_id');
             $table->integer('quantity')->default(1)->after('offer_id');
             $table->timestamps();
         });
