@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('offers', function (Blueprint $table) {
-            $table->string('contact_id')
+            $table->string('contact_id')->nullable()->default(NULL)
                 ->after('resource_id');
         });
     }
