@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 
+/**
+ *
+ */
 class UserController extends Controller
 {
     /**

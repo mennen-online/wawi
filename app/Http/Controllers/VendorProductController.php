@@ -9,6 +9,9 @@ use App\Models\VendorProduct;
 use App\Http\Requests\VendorProductStoreRequest;
 use App\Http\Requests\VendorProductUpdateRequest;
 
+/**
+ *
+ */
 class VendorProductController extends Controller
 {
     /**

@@ -8,6 +8,9 @@ use App\Models\Vendor;
 use App\Services\Lexoffice\Endpoints\Contacts;
 use Illuminate\Http\Request;
 
+/**
+ *
+ */
 class VendorController extends Controller
 {
     /**
@@ -112,6 +115,11 @@ class VendorController extends Controller
             ->withSuccess(__('crud.common.removed'));
     }
 
+    /**
+     * @param  Request  $request
+     * @param  Contacts  $contacts
+     * @return mixed
+     */
     public function import(Request $request, Contacts $contacts) {
         $page = 0;
         do {
