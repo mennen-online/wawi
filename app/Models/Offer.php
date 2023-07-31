@@ -64,7 +64,7 @@ class Offer extends Model
 
     public function contact(): Attribute {
         return new Attribute(
-            get: fn() => (new Contacts())->show($this->contact_id)
+            get: fn() => $this->contact_id ? (new Contacts())->show($this->contact_id) : null
         );
     }
 }

@@ -82,7 +82,7 @@ class VendorController extends Controller
         return view('app.vendors.edit', compact('vendor'));
     }
 
-    /**
+    /**$
      * @param \App\Http\Requests\VendorUpdateRequest $request
      * @param \App\Models\Vendor $vendor
      * @return \Illuminate\Http\Response
@@ -121,53 +121,49 @@ class VendorController extends Controller
      * @return mixed
      */
     public function import(Request $request, Contacts $contacts) {
-        $page = 0;
-        do {
-            $result = $contacts->onlyVendor()->setSize(500)->setPage($page)->index()->object();
-            collect($result->content)->each(function ($vendor) {
-                if (property_exists($vendor, 'company')) {
-                    $contactPerson = null;
-                    if(property_exists($vendor->company, 'contactPersons')) {
-                        $contactPerson = collect($vendor->company->contactPersons)->filter(function ($contactPerson) {
-                            if ($contactPerson?->primary) {
-                                return $contactPerson;
-                            }
-                        })->first();
-                    }
 
+        $contacts->onlyVendor()->setSize(500)->index()->each(function ($vendor) {
+            if (property_exists($vendor, 'company')) {
+                $contactPerson = null;
+                if(property_exists($vendor->company, 'contactPersons')) {
+                    $contactPerson = collect($vendor->company->contactPersons)->filter(function ($contactPerson) {
+                        if ($contactPerson?->primary) {
+                            return $contactPerson;
+                        }
+                    })->first();
+                }
+
+                Vendor::updateOrCreate(
+                    [
+                        'resource_id' => $vendor->id,
+                    ],
+                    [
+                        'resource_id' => $vendor->id,
+                        'company'     => $vendor->company->name,
+                        'email'       => $contactPerson?->emailAddress ?? '',
+                        'phone'       => $contactPerson?->phoneNumber ?? '',
+                        'salutation'  => $contactPerson?->salutation ?? '',
+                        'first_name'  => $contactPerson?->firstName ?? '',
+                        'last_name'   => $contactPerson?->lastName ?? '',
+                    ]);
+            } else {
+                if (property_exists($vendor, 'person')) {
                     Vendor::updateOrCreate(
                         [
                             'resource_id' => $vendor->id,
                         ],
                         [
                             'resource_id' => $vendor->id,
-                            'company'     => $vendor->company->name,
-                            'email'       => $contactPerson?->emailAddress ?? '',
-                            'phone'       => $contactPerson?->phoneNumber ?? '',
-                            'salutation'  => $contactPerson?->salutation ?? '',
-                            'first_name'  => $contactPerson?->firstName ?? '',
-                            'last_name'   => $contactPerson?->lastName ?? '',
+                            'company'     => '',
+                            'salutation'  => $vendor->person->salutation,
+                            'first_name'  => $vendor->person->firstName,
+                            'last_name'   => $vendor->person->lastName,
+                            'email'       => '',
+                            'phone'       => ''
                         ]);
-                } else {
-                    if (property_exists($vendor, 'person')) {
-                        Vendor::updateOrCreate(
-                            [
-                                'resource_id' => $vendor->id,
-                            ],
-                            [
-                                'resource_id' => $vendor->id,
-                                'company'     => '',
-                                'salutation'  => $vendor->person->salutation,
-                                'first_name'  => $vendor->person->firstName,
-                                'last_name'   => $vendor->person->lastName,
-                                'email'       => '',
-                                'phone'       => ''
-                            ]);
-                    }
                 }
-            });
-            $page++;
-        } while ($result->last === false);
+            }
+        });
 
         return to_route('vendors.index')
             ->withSuccess(__('crud.common.imported'));

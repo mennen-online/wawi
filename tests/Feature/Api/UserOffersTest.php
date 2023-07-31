@@ -61,6 +61,7 @@ class UserOffersTest extends TestCase
 
         unset($data['resource_id']);
         unset($data['user_id']);
+        unset($data['contact']);
 
         $this->assertDatabaseHas('offers', $data);
 

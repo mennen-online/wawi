@@ -97,7 +97,7 @@ class UserTest extends TestCase
 
         $response = $this->deleteJson(route('api.users.destroy', $user));
 
-        $this->assertDeleted($user);
+        $this->assertDatabaseMissing('users', $user->toArray());
 
         $response->assertNoContent();
     }

@@ -3,15 +3,18 @@
 namespace App\Jobs\Vendor;
 
 use App\Imports\Wave\ProductImport;
+use App\Jobs\Product\ProcessProductImport;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Notifications\VendorProduct\ImportSuccessfulNotification;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,13 +41,6 @@ class ImportVendorProducts implements ShouldQueue
      */
     public function handle()
     {
-        if (empty($this->vendor->csv_url)) {
-            return view('app.products.import')
-                ->with('vendors', Vendor::all())
-                ->with('editing', null)
-                ->withError(__('crud.products.errors.no_csv_configuration'));
-        }
-
         $request = Http::withBasicAuth($this->vendor->username, $this->vendor->password)->get($this->vendor->csv_url);
 
         $path = 'csv/'.$this->vendor->id.'/file.csv';
@@ -63,20 +59,18 @@ class ImportVendorProducts implements ShouldQueue
             return explode("\t", $line);
         });
 
-        $keys = $csvLines->first();
+        $keys = $csvLines->shift();
 
-        $items = $csvLines->skip(1)->all();
-
-        collect($items)->map(function($item) use($keys) {
+        $csvLines
+            ->filter(function($item) use($keys) {
+                if(count($item) === count($keys)) {
+                    return $item;
+                }
+            })
+            ->each(function($item) use($keys) {
             if(count($item) === count($keys)) {
-                return collect($keys)->combine($item);
-            }
-        })->each(function($product) {
-            if($product) {
-                (new ProductImport())->model($product->toArray());
+                ProcessProductImport::dispatch($keys, $item);
             }
         });
-
-        User::first()->notify(new ImportSuccessfulNotification($this->vendor));
     }
 }

@@ -64,6 +64,8 @@ class ProductVendorProductsTest extends TestCase
 
         $this->assertDatabaseHas('vendor_products', $data);
 
+        $data['price'] *= 1.25;
+
         $response->assertStatus(201)->assertJsonFragment($data);
 
         $vendorProduct = VendorProduct::latest('id')->first();

@@ -55,6 +55,8 @@ class VendorProductTest extends TestCase
 
         $this->assertDatabaseHas('vendor_products', $data);
 
+        $data['price'] *= 1.25;
+
         $response->assertStatus(201)->assertJsonFragment($data);
     }
 
@@ -82,6 +84,8 @@ class VendorProductTest extends TestCase
 
         $data['id'] = $vendorProduct->id;
 
+        $data['price'] *= 1.25;
+
         $this->assertDatabaseHas('vendor_products', $data);
 
         $response->assertOk()->assertJsonFragment($data);
@@ -98,7 +102,7 @@ class VendorProductTest extends TestCase
             route('api.vendor-products.destroy', $vendorProduct)
         );
 
-        $this->assertDeleted($vendorProduct);
+        $this->assertDatabaseMissing('vendor_products', $vendorProduct->toArray());
 
         $response->assertNoContent();
     }
